@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -65,6 +65,10 @@ const TableCell = styled(MuiTableCell)({
 function Row(props) {
 	const { row } = props;
 	const [open, setOpen] = useState(false);
+	useEffect(() => {
+		if (row.name === 'Задачи\u00A0на\u00A0сегодня') setOpen(true);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []); 
 
 	return (
 		<>
