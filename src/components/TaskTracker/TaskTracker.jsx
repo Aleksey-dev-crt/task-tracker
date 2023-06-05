@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -62,13 +62,14 @@ const TableCell = styled(MuiTableCell)({
 	width: '7.7%',
 });
 
-function Row(props) {
-	const { row } = props;
-	const [open, setOpen] = useState(false);
-	useEffect(() => {
-		if (row.name === 'Задачи\u00A0на\u00A0сегодня') setOpen(true);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []); 
+function Row({ row, setActual, open }) {
+	const handleClick = () => {
+		if (open) {
+			setActual('');
+		} else {
+			setActual(row.name);
+		}
+	};
 
 	return (
 		<>
@@ -83,7 +84,7 @@ function Row(props) {
 						aria-label='expand row'
 						size='small'
 						sx={{ marginLeft: '13px' }}
-						onClick={() => setOpen(!open)}>
+						onClick={handleClick}>
 						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
@@ -151,6 +152,8 @@ const rows = [
 ];
 
 export default function TaskTracker() {
+	const [actual, setActual] = useState('Задачи\u00A0на\u00A0сегодня');
+
 	return (
 		<Box sx={{ display: 'flex', margin: 'auto' }}>
 			<Box
@@ -208,7 +211,12 @@ export default function TaskTracker() {
 						</TableHead>
 						<TableBody>
 							{rows.map((row) => (
-								<Row key={row.name} row={row} />
+								<Row
+									key={row.name}
+									row={row}
+									setActual={setActual}
+									open={actual === row.name}
+								/>
 							))}
 						</TableBody>
 					</Table>
